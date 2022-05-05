@@ -1,141 +1,160 @@
-moment(Date);
-$("#currentDay").text(moment().format('dddd MMMM Do YYYY, h:mm a'));
-var currentTime = moment();
-currentTime = currentTime.startOf("hour");
-var beforeTime = moment().startOf('day').add(9, "hours");
+var currentDate = ""; 
+var currentDateString = ""; 
+var currentHour = 9; our
+var timeEntries = []; 
 
-var time1 = beforeTime.add(0, "h");
-time1 = time1.format('hh:mm A');
-$(".block1").text(time1);
-var time2 = beforeTime.add(1, "h");
-time2 = time2.format('hh:mm A');
-$(".block2").text(time2);
-var time3 = beforeTime.add(1, "h");
-time3 = time3.format('hh:mm A');
-$(".block3").text(time3);
-var time4 = beforeTime.add(1, "h");
-time4 = time4.format('hh:mm A');
-$(".block4").text(time4);
-var time5 = beforeTime.add(1, "h");
-time5 = time5.format('hh:mm A');
-$(".block5").text(time5);
-var time6 = beforeTime.add(1, "h");
-time6 = time6.format('hh:mm A');
-$(".block6").text(time6);
-var time7 = beforeTime.add(1, "h");
-time7 = time7.format('hh:mm A');
-$(".block7").text(time7);
-var time8 = beforeTime.add(1, "h");
-time8 = time8.format('hh:mm A');
-$(".block8").text(time8);
-var time9 = beforeTime.add(1, "h");
-time9 = time9.format('hh:mm A');
-$(".block9").text(time9);
+const timeEntriesName = "workDaySchedulerList"; // localstorage name
+const firstEntry = 9; 
+const lastEntry = 17; 
+const hourMap = ["12AM","1AM","2AM","3AM","4AM","5AM","6AM","7AM","8AM","9AM","10AM","11AM","12PM",
+                "1PM","2PM","3PM","4PM","5PM","6PM","7PM","8PM","9PM","10PM","11PM"]; 
 
-function testTime() {
-    time1 = moment().startOf('day').add(9, "hours");
-    currentTime = currentTime.startOf("hour");
-    if (currentTime.isAfter(time1)) {
-        $(".form9").addClass("past");
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const months = ["January", "February", "March", "April", "May", "June", 
+                "July", "August", "September", "October", "November", "December"];
+
+setCurrentDateAndHour(); 
+buildTimeBlocks(); 
+getTimeEntries(); 
+
+$(".saveBtn").click(saveClick); // Set event handler for all save buttons
+
+// Done when page loads; sets date in header and determines current hour
+function setCurrentDateAndHour() {
+    var today = new Date(); // gets current date
+    var day = today.getDate();
+    var dayEnd = "th";
+
+    currentHour = today.getHours(); // current hour
+
+
+    if (day < 10) {
+        currentDate = today.getFullYear() + months[today.getMonth()] + "0" + day; 
     }
-    else if (currentTime.isBefore(time1)) {
-        $(".form9").addClass("future");
+    else {
+        currentDate = today.getFullYear() + months[today.getMonth()] + day;
     }
-    else if (currentTime.isSame(time1)) {
-        $(".form9").addClass("present");
-    };
-    time2 = moment().startOf('day').add(10, "hours");
-    if (currentTime.isAfter(time2)) {
-        $(".form10").addClass("past");
+
+    if ((day === 1) || (day === 21) || (day === 31)) {
+        dayEnd = "st";
     }
-    else if (currentTime.isBefore(time2)) {
-        $(".form10").addClass("future");
+    else if ((day === 2) || (day === 22)) {
+        dayEnd = "nd";
     }
-    else if (currentTime.isSame(time2)) {
-        $(".form10").addClass("present");
-    };
-    time3 = moment().startOf('day').add(11, "hours");
-    if (currentTime.isAfter(time3)) {
-        $(".form11").addClass("past");
+    else if ((day === 3) || (day === 23)) {
+        dayEnd = "rd";
     }
-    else if (currentTime.isBefore(time3)) {
-        $(".form11").addClass("future");
-    }
-    else if (currentTime.isSame(time3)) {
-        $(".form11").addClass("present");
-    };
-    time4 = moment().startOf('day').add(12, "hours");
-    if (currentTime.isAfter(time4)) {
-        $(".form12").addClass("past");
-    }
-    else if (currentTime.isBefore(time4)) {
-        $(".form12").addClass("future");
-    }
-    else if (currentTime.isSame(time4)) {
-        $(".form12").addClass("present");
-    };
-    time5 = moment().startOf('day').add(13, "hours");
-    if (currentTime.isAfter(time5)) {
-        $(".form1").addClass("past");
-    }
-    else if (currentTime.isBefore(time5)) {
-        $(".form1").addClass("future");
-    }
-    else if (currentTime.isSame(time5)) {
-        $(".form1").addClass("present");
-    };
-    time6 = moment().startOf('day').add(14, "hours");
-    if (currentTime.isAfter(time6)) {
-        $(".form2").addClass("past");
-    }
-    else if (currentTime.isBefore(time6)) {
-        $(".form2").addClass("future");
-    }
-    else if (currentTime.isSame(time6)) {
-        $(".form2").addClass("present");
-    };
-    time7 = moment().startOf('day').add(15, "hours");
-    if (currentTime.isAfter(time7)) {
-        $(".form3").addClass("past");
-    }
-    else if (currentTime.isBefore(time7)) {
-        $(".form3").addClass("future");
-    }
-    else if (currentTime.isSame(time7)) {
-        $(".form3").addClass("present");
-    };
-    time8 = moment().startOf('day').add(16, "hours");
-    if (currentTime.isAfter(time8)) {
-        $(".form4").addClass("past");
-    }
-    else if (currentTime.isBefore(time8)) {
-        $(".form4").addClass("future");
-    }
-    else if (currentTime.isSame(time8)) {
-        $(".form4").addClass("present");
-    };
-    time9 = moment().startOf('day').add(17, "hours");
-    if (currentTime.isAfter(time9)) {
-        $(".form5").addClass("past");
-    }
-    else if (currentTime.isBefore(time9)) {
-        $(".form5").addClass("future");
-    }
-    else if (currentTime.isSame(time9)) {
-        $(".form5").addClass("present");
-    };
+
+    currentDateString = days[today.getDay()] + ", " + months[today.getMonth()] + " " + 
+        day + dayEnd + ", " + today.getFullYear(); // date string to display in header
+    $("#currentDay").text(currentDateString); // set header date
 }
-testTime();
-var x = [9, 10, 11, 12, 1, 2, 3, 4, 5];
-for (var i = 0; i < x.length; i++) {
-    var dataHour = localStorage.getItem(x[i]);
-    $(".form" + x[i]).val(dataHour);
-}
-$(".saveBtn").click(function () {
-    event.preventDefault();
-    var formValue = $(this).siblings(".form-control").val();
-    console.log("This worked");
-    var listItem = $(this).parent().data("hour");
 
-    localStorage.setItem(listItem, formValue);
-});
+// Creates time blocks
+function buildTimeBlocks() {
+    var containerDiv = $(".container"); 
+
+    for (let hourBlock=firstEntry; hourBlock <= lastEntry; hourBlock++) {
+        var newHtml = '<div class="row time-block"> ' +
+            '<div class="col-md-1 hour">' + hourMap[hourBlock] + '</div> ';
+        
+        if (hourBlock < currentHour) {
+            newHtml = newHtml + '<textarea class="col-md-10 description past" id="text' + 
+                hourMap[hourBlock] + '"></textarea> ';
+        }
+        else if (hourBlock === currentHour) {
+            newHtml = newHtml + '<textarea class="col-md-10 description present" id="text' + 
+                hourMap[hourBlock] + '"></textarea> ';
+        }
+        else {
+            newHtml = newHtml + '<textarea class="col-md-10 description future" id="text' + 
+                hourMap[hourBlock] + '"></textarea> ';
+        };
+
+        newHtml = newHtml + '<button class="btn saveBtn col-md-1" value="' + hourMap[hourBlock] + '">' +
+            '<i class="fas fa-save"></i></button> ' +
+            '</div>';
+
+        containerDiv.append(newHtml);
+    }
+}
+
+// loads timeEntries array from localstorage
+function getTimeEntries() {
+    var teList = JSON.parse(localStorage.getItem(timeEntriesName));
+
+    if (teList) {
+        timeEntries = teList;
+    }
+
+    for (let i=0; i<timeEntries.length; i++) {
+        // only load entries for today
+        if (timeEntries[i].day == currentDate) {
+            $("#text"+timeEntries[i].time).val(timeEntries[i].text); // update text in correct hour
+        }
+    }
+}
+
+// onClick event for all buttons
+function saveClick() {
+    var hourBlock = $(this).val(); 
+    var entryFound = false;
+    var newEntryIndex = timeEntries.length; 
+    var newEntry = {day: currentDate, time: hourBlock, text: $("#text"+hourBlock).val()}; 
+
+    function timeGreater(time1,time2) {
+        var num1 = parseInt(time1.substring(0, time1.length-2)); 
+        var num2 = parseInt(time2.substring(0, time2.length-2)); 
+        var per1 = time1.substr(-2,2); 
+        var per2 = time2.substr(-2,2); 
+
+        // Need to convert 12 noon to zero for comparison below to work
+        if (num1 === 12) {
+            num1 = 0;
+        }
+
+        if (num2 === 12) {
+            num2 = 0;
+        }
+
+        // can compare time period first, if equal, then compare numeric part of time
+        if (per1 < per2) {
+            return false; // AM < PM
+        }
+        else if (per1 > per2) {
+            return true; // PM > AM
+        }
+        else {
+            return (num1 > num2);
+        }
+    }
+
+    // check the timeEntries array to see if there is already an entry for this hour
+    for (let i=0; i<timeEntries.length; i++) {
+        if (timeEntries[i].day == currentDate) {
+            if (timeEntries[i].time == hourBlock) {
+                timeEntries[i].text = newEntry.text; // If entry already exists,  update text
+                entryFound = true; // entry already exists
+                break;
+            }
+            // entry does not exist, insert when you reach the first hour that is greter
+            else if (timeGreater(timeEntries[i].time, hourBlock)) {
+                newEntryIndex = i;
+                break;
+            }
+        }
+        // no entries exist for current day, insert when you reach first day that is greater
+        else if (timeEntries[i].day > currentDate) {
+            newEntryIndex = i;
+            break;
+        }
+    }
+
+    // If the entry didn't already exist, add it to the array in the appropriate place
+    if (!entryFound) {
+        timeEntries.splice(newEntryIndex, 0, newEntry);
+    }
+
+    // store in local storage
+    localStorage.setItem(timeEntriesName, JSON.stringify(timeEntries));
+}
